@@ -1,2 +1,2 @@
 # wordblitz-bot
-a bot to play messenger's word blitz game
+A bot to play messenger's word blitz game
