@@ -10,7 +10,7 @@
 using namespace std;
 typedef pair<int, int> pii;
 
-// BEGIN TRIE //
+/* begin trie */
 struct trie {
   trie(bool e = false): endmarker(e), children( {
     0
@@ -37,7 +37,7 @@ bool insert(trie* root, string& s, int i = 0) {
     root->children[s[i]] = new trie();
   return insert(root->children[s[i]], s, i + 1);
 }
-// END TRIE //
+/* end trie */
 
 void fix(string& s) {
   forn(i, s.size()) s[i] -= 'a';
@@ -78,7 +78,7 @@ int main() {
   assert(s.size() == 16);
   forn(i, 16) board[i / 4][i % 4] = (s[i]|' ') - 'a';
 
-  // WORDLIST INPUT
+  /* wordlist input */
 
   ifstream wordlist("wordlist.txt");
   int n;
@@ -91,7 +91,7 @@ int main() {
     insert(root, word);
   }
 
-  // GET WORDS
+  /* get words */
 
   unordered_set<string> donewords;
   vector<vector<pii>> words;
@@ -128,7 +128,7 @@ int main() {
     dfs(root->children[board[i][j]], i, j, word);
   }
 
-  // INPUT WORDS
+  /* input words */
 
   focus();
   Sleep(300);
