@@ -76,7 +76,7 @@ int main() {
   string s;
   cin >> s;
   assert(s.size() == 16);
-  forn(i, 16) board[i / 4][i % 4] = (s[i]|' ') - 'a';
+  forn(i, 16) board[i / 4][i % 4] = (s[i] | ' ') - 'a';
 
   /* wordlist input */
 
