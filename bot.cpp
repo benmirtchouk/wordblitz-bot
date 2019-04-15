@@ -143,6 +143,6 @@ int main() {
     if (GetKeyState('E') & 0x100) return 0;
     cout << decode(word) << "\n";
     input_word(word);
-    Sleep(25);
+    Sleep(35);
   }
 }

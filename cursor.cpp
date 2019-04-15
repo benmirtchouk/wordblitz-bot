@@ -45,11 +45,11 @@ void input_word(vector<pii>& path) {
   if (!path.size()) return;
 
   startpath(path[0].first, path[0].second);
-  Sleep(25);
+  Sleep(35);
 
   for(int i = 1; i < path.size(); i++) {
     dragto(path[i].first, path[i].second);
-    Sleep(25);
+    Sleep(35);
   }
 
   endpath(path.back().first, path.back().second);
