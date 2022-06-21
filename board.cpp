@@ -17,10 +17,6 @@ Board::Board(): d_letters() {
   }
 }
 
-char Board::get(int index) const {
-  return d_letters[index];
-}
-
 int Board::encode(int x, int y) {
   return 4 * x + y;
 }
@@ -39,8 +35,17 @@ std::vector<Board::path> Board::search(std::shared_ptr<TrieNode<char>> root) con
     }
   }
 
+  std::unordered_set<std::string> words;
+  output.erase(
+    std::remove_if(output.begin(), output.end(), [&](const Board::path& path) {
+      std::string s;
+      for (int i : path) s += d_letters[i];
+      return !words.insert(s).second;
+    }),
+    output.end()
+  );
 
-  std::sort(output.begin(), output.end(), [&](const Board::path& p1, const Board::path& p2) {
+  std::sort(output.begin(), output.end(), [](const Board::path & p1, const Board::path & p2) {
     return p1.size() > p2.size();
   });
   return output;

@@ -8,31 +8,31 @@
 
 template <typename K>
 class TrieNode : public std::enable_shared_from_this<TrieNode<K>> {
-  public:
-    static std::shared_ptr<TrieNode<K>> create(bool end = false) {
-      return std::shared_ptr<TrieNode<K>>(new TrieNode<K>(end));
+public:
+  static std::shared_ptr<TrieNode<K>> create(bool end = false) {
+    return std::shared_ptr<TrieNode<K>>(new TrieNode<K>(end));
+  }
+  static std::shared_ptr<TrieNode<K>> create(const char* filename) {
+    std::shared_ptr<TrieNode<K>> node = create();
+    std::ifstream wordlist(filename);
+    std::string word;
+    while(wordlist >> word) {
+      node->insert(word.begin(), word.end());
     }
-    static std::shared_ptr<TrieNode<K>> create(const char* filename) {
-      std::shared_ptr<TrieNode<K>> node = create();
-      std::ifstream wordlist(filename);
-      std::string word;
-      while(wordlist >> word) {
-        node->insert(word.begin(), word.end());
-      }
-      return node;
-    }
+    return node;
+  }
 
-    bool end();
-    std::shared_ptr<TrieNode<K>> traverse(const K& key);
+  bool end();
+  std::shared_ptr<TrieNode<K>> traverse(const K& key);
 
-    template <typename InputIt>
-    void insert(InputIt first, InputIt last);
+  template <typename InputIt>
+  void insert(InputIt first, InputIt last);
 
-  private:
-    TrieNode(bool end);
+private:
+  TrieNode(bool end);
 
-    bool d_end;
-    std::unordered_map<K, std::shared_ptr<TrieNode>> d_edges;
+  bool d_end;
+  std::unordered_map<K, std::shared_ptr<TrieNode>> d_edges;
 };
 
 template <typename K>
@@ -53,7 +53,9 @@ void TrieNode<K>::insert(InputIt first, InputIt last) {
 }
 
 template <typename K>
-bool TrieNode<K>::end() { return d_end; }
+bool TrieNode<K>::end() {
+  return d_end;
+}
 
 template <typename K>
 std::shared_ptr<TrieNode<K>> TrieNode<K>::traverse(const K& key) {

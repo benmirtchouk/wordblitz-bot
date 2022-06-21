@@ -40,11 +40,11 @@ void endpath(const std::pair<int, int>& pos) {
   mouse_event(MOUSEEVENTF_LEFTUP, pos.first, pos.second, 0, 0);
 }
 
-std::pair<int,int> Cursor::index_to_pixels(const std::pair<int, int>& index) {
+std::pair<int, int> Cursor::index_to_pixels(const std::pair<int, int>& index) {
   return { d_x + d_len * index.second, d_y + d_len * index.first };
 }
 
-void Cursor::trace_path(const std::vector<std::pair<int,int>>& path) {
+void Cursor::trace_path(const std::vector<std::pair<int, int>>& path) {
   if (path.empty()) return;
 
   startpath(index_to_pixels(path[0]));
