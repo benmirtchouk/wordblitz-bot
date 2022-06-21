@@ -1,8 +1,8 @@
 #ifndef BOARD_H
 #define BOARD_H
 
-#include <Windows.h>
 #include <trie.h>
+
 #include <string>
 #include <vector>
 #include <unordered_set>

@@ -1,5 +1,6 @@
 #include <cursor.h>
 #include <Windows.h>
+
 #include <iostream>
 
 Cursor::Cursor() {

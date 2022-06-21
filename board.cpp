@@ -1,4 +1,5 @@
 #include <board.h>
+
 #include <iostream>
 #include <cassert>
 #include <algorithm>

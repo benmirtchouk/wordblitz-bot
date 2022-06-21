@@ -1,7 +1,6 @@
 #ifndef CURSOR_H
 #define CURSOR_H
 
-#include <Windows.h>
 #include <vector>
 
 class Cursor {

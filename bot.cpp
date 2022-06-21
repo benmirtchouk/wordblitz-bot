@@ -1,13 +1,14 @@
+#include <cursor.h>
+#include <trie.h>
+#include <board.h>
 #include <Windows.h>
+
 #include <iostream>
 #include <vector>
 #include <string>
 #include <unordered_set>
 #include <algorithm>
 #include <memory>
-#include <cursor.h>
-#include <trie.h>
-#include <board.h>
 
 int main() {
   std::shared_ptr<TrieNode<char>> root = TrieNode<char>::create("wordlist.txt");
