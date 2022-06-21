@@ -1,56 +1,60 @@
+#include <cursor.h>
 #include <Windows.h>
-#include <bits/stdc++.h>
-#define forn(i,n) for(int i = 0; i < (int) n; i++)
 
-using namespace std;
-typedef pair<int, int> pii;
+#include <iostream>
 
-int len, px, py;
+Cursor::Cursor() {
+  POINT tl, br;
 
-void init(POINT tl, POINT br) {
-  px = tl.x;
-  py = tl.y;
-  len = (br.x - tl.x) / 3;
-  cout << "init with " << tl.x << " " << br.x << "\n";
+  std::cout << "Top left (press Q to mark)?" << std::endl;
+  while(!(GetKeyState('Q') & 0x100));
+  GetCursorPos(&tl);
+
+  Sleep(300);
+  std::cout << "Bottom right (press Q to mark)?" << std::endl;
+  while(!(GetKeyState('Q') & 0x100));
+  GetCursorPos(&br);
+
+  d_x = tl.x;
+  d_y = tl.y;
+  d_len = (br.x - tl.x) / 3;
 }
 
-bool focus() {
-  HWND window = FindWindow("Chrome_WidgetWin_1", NULL);
-  if (!window) {
-    cout << "failed to grab window\n";
-    return -1;
+void Cursor::focus(const char* windowName) {
+  HWND window = FindWindow(windowName, NULL);
+  if (window) {
+    SetForegroundWindow(window);
+    SetActiveWindow(window);
+    SetFocus(window);
   }
-
-  SetForegroundWindow(window);
-  SetActiveWindow(window);
-  SetFocus(window);
-
-  return 0;
 }
 
-void startpath(int y, int x) {
-  SetCursorPos(px + len * x, py + len * y);
-  mouse_event(MOUSEEVENTF_LEFTDOWN, px + len * x, py + len * y, 0, 0);
+void startpath(const std::pair<int, int>& pos) {
+  SetCursorPos(pos.first, pos.second);
+  mouse_event(MOUSEEVENTF_LEFTDOWN, pos.first, pos.second, 0, 0);
+}
+void dragto(const std::pair<int, int>& pos) {
+  SetCursorPos(pos.first, pos.second);
+}
+void endpath(const std::pair<int, int>& pos) {
+  mouse_event(MOUSEEVENTF_LEFTUP, pos.first, pos.second, 0, 0);
 }
 
-void dragto(int y, int x) {
-  SetCursorPos(px + len * x, py + len * y);
+std::pair<int, int> Cursor::index_to_pixels(const std::pair<int, int>& index) {
+  return { d_x + d_len * index.second, d_y + d_len * index.first };
 }
 
-void endpath(int y, int x) {
-  mouse_event(MOUSEEVENTF_LEFTUP, px + len * x, py + len * y, 0, 0);
-}
+void Cursor::trace_path(const std::vector<std::pair<int, int>>& path) {
+  if (path.empty()) return;
 
-void input_word(vector<pii>& path) {
-  if (!path.size()) return;
-
-  startpath(path[0].first, path[0].second);
+  startpath(index_to_pixels(path[0]));
   Sleep(35);
 
   for(int i = 1; i < path.size(); i++) {
-    dragto(path[i].first, path[i].second);
+    dragto(index_to_pixels(path[i]));
     Sleep(35);
   }
 
-  endpath(path.back().first, path.back().second);
+  endpath(index_to_pixels(path.back()));
 }
+
