@@ -19,6 +19,7 @@ public:
   static std::pair<int, int> decode(int index);
 
 private:
+  static const int SIZE;
   static const int dx[];
   static const int dy[];
   void search(int x, int y, std::shared_ptr<TrieNode<char>> node, path& cur_path, std::unordered_set<int>& visited, std::vector<path>& output) const;
