@@ -1,7 +1,8 @@
 #include <Windows.h>
 #include <bits/stdc++.h>
-#include "cursor.cpp"
-#include "trie.h"
+#include <cursor.h>
+#include <trie.h>
+
 #define all(a) a.begin(), a.end()
 #define forn(i,n) for(int i = 0; i < (int) n; i++)
 
@@ -17,27 +18,11 @@ string decode(vector<pii>& word) {
   return decoded;
 }
 
-void wait() {
-  while(!(GetKeyState('Q') & 0x100));
-}
-
 int dx[] = { -1, -1, -1, 0, 1, 1, 1, 0};
 int dy[] = { -1, 0, 1, 1, 1, 0, -1, -1};
 
 int main() {
-  /* board position */
-
-  POINT tl, br;
-  cout << "top left (press Q to mark)?\n";
-  wait();
-  GetCursorPos(&tl);
-  Sleep(300);
-  cout << "bottom right (press Q to mark)?\n";
-  wait();
-  GetCursorPos(&br);
-  init(tl, br);
-
-  /* board input */
+  Cursor cursor;
 
   cout << "board state? (input length 16 string)\n";
   string s;
@@ -47,14 +32,13 @@ int main() {
 
   /* wordlist input */
 
-  ifstream wordlist("wordlist.txt");
-  int n;
-  wordlist >> n;
   shared_ptr<TrieNode<char>> root = TrieNode<char>::create();
-  forn(i, n) {
+  {
+    ifstream wordlist("wordlist.txt");
     string word;
-    wordlist >> word;
-    root->insert(word.begin(), word.end());
+    while(wordlist >> word) {
+      root->insert(word.begin(), word.end());
+    }
   }
 
   /* get words */
@@ -95,7 +79,7 @@ int main() {
 
   /* input words */
 
-  focus();
+  cursor.focus("Chrome_WidgetWin_1");
   Sleep(300);
 
   sort(all(words), [&](const vector<pii>& i, const vector<pii>& j) {
@@ -107,7 +91,7 @@ int main() {
   for(vector<pii>& word : words) {
     if (GetKeyState('E') & 0x100) return 0;
     cout << decode(word) << "\n";
-    input_word(word);
+    cursor.trace_path(word);
     Sleep(35);
   }
 }
