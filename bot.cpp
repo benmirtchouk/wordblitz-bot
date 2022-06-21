@@ -1,97 +1,40 @@
 #include <Windows.h>
-#include <bits/stdc++.h>
+#include <iostream>
+#include <vector>
+#include <string>
+#include <unordered_set>
+#include <algorithm>
+#include <memory>
 #include <cursor.h>
 #include <trie.h>
-
-#define all(a) a.begin(), a.end()
-#define forn(i,n) for(int i = 0; i < (int) n; i++)
-
-#define x first
-#define y second
-using namespace std;
-typedef pair<int, int> pii;
-
-vector<vector<char>> board(4, vector<char>(4));
-string decode(vector<pii>& word) {
-  string decoded = "";
-  for(pii& p : word) decoded += board[p.x][p.y];
-  return decoded;
-}
-
-int dx[] = { -1, -1, -1, 0, 1, 1, 1, 0};
-int dy[] = { -1, 0, 1, 1, 1, 0, -1, -1};
+#include <board.h>
 
 int main() {
+  std::shared_ptr<TrieNode<char>> root = TrieNode<char>::create("wordlist.txt");
   Cursor cursor;
+  Board board;
 
-  cout << "board state? (input length 16 string)\n";
-  string s;
-  cin >> s;
-  assert(s.size() == 16);
-  forn(i, 16) board[i / 4][i % 4] = (s[i] | ' ');
-
-  /* wordlist input */
-
-  shared_ptr<TrieNode<char>> root = TrieNode<char>::create();
-  {
-    ifstream wordlist("wordlist.txt");
-    string word;
-    while(wordlist >> word) {
-      root->insert(word.begin(), word.end());
-    }
-  }
-
-  /* get words */
-
-  unordered_set<string> donewords;
-  vector<vector<pii>> words;
-
-  vector<vector<bool>> done(4, vector<bool>(4));
-  function<void(std::shared_ptr<TrieNode<char>>, int, int, vector<pii>&)> dfs = [&](std::shared_ptr<TrieNode<char>> root, int x, int y, vector<pii>& word) {
-    if (done[x][y]) return;
-    if (!root) return;
-    if (root->end()) {
-      string decoded = decode(word);
-      if (donewords.find(decoded) == donewords.end()) {
-        donewords.insert(decoded);
-        words.push_back(word);
-        cout << "\t" << decoded << "\n";
-      }
-    }
-
-    done[x][y] = 1;
-    forn(d, 8) {
-      int nx = x + dx[d], ny = y + dy[d];
-      if (nx >= 0 && nx < 4 && ny >= 0 && ny < 4) {
-        word.push_back({nx, ny});
-        dfs(root->traverse(board[nx][ny]), nx, ny, word);
-        word.pop_back();
-      }
-    }
-    done[x][y] = 0;
-  };
-
-  forn(i, 4) forn(j, 4) {
-    cout << "starting at " << i << ", " << j << "\n";
-    vector<pii> word{{i, j}};
-    dfs(root->traverse(board[i][j]), i, j, word);
-  }
-
-  /* input words */
+  std::vector<Board::path> paths = board.search(root);
 
   cursor.focus("Chrome_WidgetWin_1");
   Sleep(300);
 
-  sort(all(words), [&](const vector<pii>& i, const vector<pii>& j) {
-    return i.size() > j.size();
-  });
+  std::unordered_set<std::string> entered_words;
 
-  cout << "\n\n";
-
-  for(vector<pii>& word : words) {
+  for(const Board::path& raw_path : paths) {
     if (GetKeyState('E') & 0x100) return 0;
-    cout << decode(word) << "\n";
-    cursor.trace_path(word);
-    Sleep(35);
+
+    std::vector<std::pair<int, int>> path;
+    std::string word;
+    std::transform(raw_path.cbegin(), raw_path.cend(), std::back_inserter(path), Board::decode);
+    std::transform(raw_path.cbegin(), raw_path.cend(), std::back_inserter(word), [&board](const int& index){ return board.get(index); });
+
+    if (entered_words.insert(word).second) {
+      std::cout << "entering word: " << word << "\n";
+      cursor.trace_path(path);
+      Sleep(35);
+    }
   }
+
+  return 0;
 }
