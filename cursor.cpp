@@ -50,7 +50,7 @@ void Cursor::trace_path(const std::vector<std::pair<int, int>>& path) {
   startpath(index_to_pixels(path[0]));
   Sleep(35);
 
-  for(int i = 1; i < path.size(); i++) {
+  for(size_t i = 1; i < path.size(); i++) {
     dragto(index_to_pixels(path[i]));
     Sleep(35);
   }

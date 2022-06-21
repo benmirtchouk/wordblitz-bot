@@ -1,4 +1,4 @@
-CC=g++
+CC=g++ -g -std=c++17 -Wall -Wextra -Werror -pedantic
 
 all: bot.exe
 

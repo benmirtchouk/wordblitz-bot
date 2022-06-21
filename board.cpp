@@ -40,7 +40,6 @@ std::vector<Board::path> Board::search(std::shared_ptr<TrieNode<char>> root) con
     std::remove_if(output.begin(), output.end(), [&](const Board::path& path) {
       std::string s;
       for (int i : path) s += d_letters[i];
-      std::cout << "found word " << s << "\n";
       return !words.insert(s).second;
     }),
     output.end()
