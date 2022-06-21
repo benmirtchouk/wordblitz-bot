@@ -30,7 +30,7 @@ int main() {
     std::transform(raw_path.cbegin(), raw_path.cend(), std::back_inserter(word), [&board](const int& index){ return board.get(index); });
 
     if (entered_words.insert(word).second) {
-      std::cout << "entering word: " << word << "\n";
+      std::cout << "Entering word: " << word << "\n";
       cursor.trace_path(path);
       Sleep(35);
     }

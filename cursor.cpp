@@ -5,12 +5,12 @@
 Cursor::Cursor() {
   POINT tl, br;
 
-  std::cout << "top left (press Q to mark)?" << std::endl;
+  std::cout << "Top left (press Q to mark)?" << std::endl;
   while(!(GetKeyState('Q') & 0x100));
   GetCursorPos(&tl);
 
   Sleep(300);
-  std::cout << "bottom right (press Q to mark)?" << std::endl;
+  std::cout << "Bottom right (press Q to mark)?" << std::endl;
   while(!(GetKeyState('Q') & 0x100));
   GetCursorPos(&br);
 

@@ -7,7 +7,7 @@ const int Board::dx[8] = { -1, -1, -1, 0, 1, 1, 1, 0};
 const int Board::dy[8] = { -1, 0, 1, 1, 1, 0, -1, -1};
 
 Board::Board(): d_letters() {
-  std::cout << "board state? (input length 16 string)\n";
+  std::cout << "Board state? (input length 16 string)" << std::endl;
   std::string s;
   std::cin >> s;
   assert(s.size() == 16);
