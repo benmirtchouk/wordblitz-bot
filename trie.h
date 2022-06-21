@@ -5,6 +5,7 @@
 #include <string>
 #include <memory>
 #include <fstream>
+#include <algorithm>
 
 template <typename K>
 class TrieNode : public std::enable_shared_from_this<TrieNode<K>> {
@@ -12,15 +13,7 @@ public:
   static std::shared_ptr<TrieNode<K>> create(bool end = false) {
     return std::shared_ptr<TrieNode<K>>(new TrieNode<K>(end));
   }
-  static std::shared_ptr<TrieNode<K>> create(const char* filename) {
-    std::shared_ptr<TrieNode<K>> node = create();
-    std::ifstream wordlist(filename);
-    std::string word;
-    while(wordlist >> word) {
-      node->insert(word.begin(), word.end());
-    }
-    return node;
-  }
+  static std::shared_ptr<TrieNode<char>> create(const char* filename);
 
   bool end();
   std::shared_ptr<TrieNode<K>> traverse(const K& key);
